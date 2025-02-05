@@ -14,5 +14,5 @@
 
 ### 1. 연관관계 & FK
 - 개념적으로 FK 를 사용하지만, 물리적으로 FK 는 사용하지 않을 상황을 예시로 다룸
-  - <a href="">1. JPA 옵션을 통한 개념적 FK 사용 </a>
-  - <a href="">2. id 를 통한 연관관계 참조 </a>
+  - <a href="https://github.com/Hyeonqz/jpa-best-example/tree/master/src/main/java/org/hyeonqz/jpabestexample/associationfk/option">1. JPA 옵션을 통한 개념적 FK 사용 </a>
+  - <a href="https://github.com/Hyeonqz/jpa-best-example/tree/master/src/main/java/org/hyeonqz/jpabestexample/associationfk/id">2. id 를 통한 연관관계 참조 </a>
