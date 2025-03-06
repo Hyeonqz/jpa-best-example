@@ -63,6 +63,72 @@ private Boolean bestSelling;
 
 
 #### 애그리거트 루트로부터 최적의 도메인 이벤트 발행
+스프링 레포지토리로 관리되는 엔티티는 애그리거트 루트 라 한다 <br>
+스프링 데이터는 @DomainEvents 어노테이션과 함께 제공된다 <br>
+위 옵션은 애그리거트 루트의 메소드에서 사용된다 <br>
+
+@DomainEvents 어노테이션을 갖는 메소드는 스프링 데이터에 의해 인식되며 레포지토리를 통해 엔티티가 저장될 때 마다 자동으로 호출된다 <br>
+이 외에도 Spring Data 는 @AfterDomainEventPublication 어노테이션을 제공한다 <br>
+이벤트 발행 후 이벤트를 정리하고자 자동으로 호출 돼야 하는 메소드를 지정한다 <br>
+```java
+    @DomainEvents
+    public void publishCreate() {
+        // 이벤트 선언
+    }
+    
+    @AfterDomainEventPublication
+    public void callbackMethod() {
+        // 잠재적으로 도메인 이벤트 리스트 정리
+    }
+```
+
+Spring Data 는 내부적인 발행 메커니즘을 사용하는 편리한 템플릿 기반 클래스를 제공한다 (AbstractAggregateRoot.registerEvent()) <br>
+등록된 이벤트는 Spring Data 레포지토리의 save() 가 호출하면 자동으로 발행되고 발행 후 초기화 된다 <br>
+
+#### 동기식 이벤트 실행
+이벤트 핸들러에는 @TransactionalEventListener 어노테이션을 사용한다 <br>
+그리고 단계 설정을 통해 이벤트를 발행한 트랜잭션 단계에 명시적으로 바인딩 된다 <br>
+```java
+    BEFORE_COMMIT,
+	AFTER_COMMIT,
+	AFTER_ROLLBACK,
+	AFTER_COMPLETION
+```
+
+기본 설정은 AFTER_COMMIT 이다 <br>
+AFTER_COMMIT 은 AFTER_COMPLETION 의 세부화 단계 이다 <br>
+
+```java
+@TransactionalEventListener
+@Transactional(propagation = Propagation.REQUIRES_NEW)
+public void handleCheckReviewEvent() {
+    // 이벤트 로직
+}
+```
+
+위 코드는 새로운 트랜잭션을 명시적으로 요구하는 것이다 <br>
+@TransactionalEventListener 위에서 데이트베이스 변경이 필요하면 명시적인 새 트랜잭션 Propagation.REQUIRES_NEW 이 필요하다 <br>
+하지만 성능 관점에서 비용이 들기 때문에 잘 알고 사용해야 한다 <br>
+
+#### 비동기식 이벤트 실행
+스프링부트에서 @EnableAsync 를 통해 비동기 기능을 활성화 한 후에 @Async 를 붙여 사용한다.
+```java
+@Async
+@TransactionalEventListener
+@Transactional(propagation = Propagation.REQUIRES_NEW)
+public void handleCheckReviewEvent() {
+    // 이벤트 로직
+}
+```
+
+
+
+
+
+
+
+
+
 
 
 
