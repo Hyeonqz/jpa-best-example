@@ -121,29 +121,11 @@ public void handleCheckReviewEvent() {
 }
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+적절한 커넥션 풀과 데이터베이스 서버를 위해서는 짧은 데이터베이스 트랜잭션을 갖는게 좋다 <br>
+#### 비동기식 실행 시:
+- 비동기식 실행에 적합한 작업을 실행해야 하는 경우 AFTER_COMMIT 과 함께 이벤트 핸들러를 사용한다
+- 해당 작업이 C U 작업이 없을 경우 @Transactional 을 적용하지 않는다
+- 해당 작업이 C U 작업이 있을 경우 Propagation.REQUIRES_NEW 를 사용하여 필요할 때 까지 데이터베이스 커넥션을 얻는다.
+  - 읽기 작업이 있을 경우 -> @Transactional(readOnly=true, Propagation.REQUIRES_NEW) 를 적용한다.
+  - 쓰기,수정 작업이 있을 경우 -> @Transactional(Propagation.REQUIRES_NEW) 를 적용한다.:q
+- 비동기 작업이 BEFORE_COMMIT 옵션은 적용하지 않는다.
