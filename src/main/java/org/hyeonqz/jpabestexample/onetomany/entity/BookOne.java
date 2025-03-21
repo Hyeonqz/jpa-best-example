@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @EqualsAndHashCode
 @Entity
-public class Book {
+public class BookOne {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class Book {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="author_id")
-    private Author author;
+    private AuthorOne authorOne;
 
     @Override
     public String toString() {

@@ -1,6 +1,6 @@
 package org.hyeonqz.jpabestexample.onetomany.service;
 
-import org.hyeonqz.jpabestexample.onetomany.entity.Author;
+import org.hyeonqz.jpabestexample.onetomany.entity.AuthorOne;
 import org.hyeonqz.jpabestexample.onetomany.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,20 +15,20 @@ public class AuthorService {
     // cascadeType 사용 하여 삭제
     @Transactional
     public void deleteAuthor() {
-        Author author = authorRepository.findById(1L).orElse(null);
+        AuthorOne authorOne = authorRepository.findById(1L).orElse(null);
 
-        authorRepository.delete(author);
+        authorRepository.delete(authorOne);
     }
 
     // orphanRemoval 사용 하여 삭제
     @Transactional
     public void useOrphanRemovalAuthor() {
-        Author author = authorRepository.findById(1L).orElse(null);
+        AuthorOne authorOne = authorRepository.findById(1L).orElse(null);
 
         authorRepository.deleteAllByIdInBatch();
 
-        author.removeBooks();
-        authorRepository.delete(author);
+        authorOne.removeBooks();
+        authorRepository.delete(authorOne);
     }
 
 }

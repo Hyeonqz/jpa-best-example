@@ -1,7 +1,7 @@
 package org.hyeonqz.jpabestexample.onetomany.service;
 
-import org.hyeonqz.jpabestexample.onetomany.entity.Author;
-import org.hyeonqz.jpabestexample.onetomany.entity.Book;
+import org.hyeonqz.jpabestexample.onetomany.entity.AuthorOne;
+import org.hyeonqz.jpabestexample.onetomany.entity.BookOne;
 import org.hyeonqz.jpabestexample.onetomany.repository.AuthorRepository;
 import org.hyeonqz.jpabestexample.onetomany.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -15,16 +15,16 @@ public class BookService {
     private final AuthorRepository authorRepository;
 
     public void insertNewBook() {
-        Author author = authorRepository.getReferenceById(4L);
+        AuthorOne authorOne = authorRepository.getReferenceById(4L);
 
-        Book book = new Book();
-        book.setIsbn("003-JIN");
-        book.setTitle("hi");
-        book.setAuthor(author);
+        BookOne bookOne = new BookOne();
+        bookOne.setIsbn("003-JIN");
+        bookOne.setTitle("hi");
+        bookOne.setAuthorOne(authorOne);
 
-        bookRepository.save(book);
+        bookRepository.save(bookOne);
 
-        book.setIsbn("hi?");
+        bookOne.setIsbn("hi?");
     }
 
 }

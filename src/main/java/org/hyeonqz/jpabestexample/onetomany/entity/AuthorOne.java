@@ -22,11 +22,11 @@ import lombok.Setter;
 @NamedEntityGraph(
         name = "author-books-graph",
         attributeNodes = {
-                @NamedAttributeNode("books")
+                @NamedAttributeNode("bookOnes")
         }
 )
 @Entity
-public class Author implements Serializable {
+public class AuthorOne implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -40,20 +40,20 @@ public class Author implements Serializable {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", orphanRemoval = true)
-    private List<Book> books = new ArrayList<>();
+    private List<BookOne> bookOnes = new ArrayList<>();
 
-    public void removeBook(Book book) {
-        book.setAuthor(null);
-        this.books.remove(book);
+    public void removeBook(BookOne bookOne) {
+        bookOne.setAuthorOne(null);
+        this.bookOnes.remove(bookOne);
     }
 
     public void removeBooks() {
-        Iterator<Book> iterator = this.books.iterator();
+        Iterator<BookOne> iterator = this.bookOnes.iterator();
 
         while(iterator.hasNext()) {
-            Book book = iterator.next();
+            BookOne bookOne = iterator.next();
 
-            book.setAuthor(null);
+            bookOne.setAuthorOne(null);
         }
     }
 
