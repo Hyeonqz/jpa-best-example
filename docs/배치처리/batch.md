@@ -109,14 +109,26 @@ CompletableFuture 비동기 API 를 제공한다
 - 결과 반환이 필요한 경우 -> supplyAsync() 메소드를 이용하자
 
 
-#### 배치 업데이트에 대한 효율적인 처리 방법
+### 배치 업데이트에 대한 효율적인 처리 방법
+> 부모-자식 관계의 배치 업데이트
 
+```java
+spring.jpa.properties.hibernate.order_updates=true
+```
+업데이트가 전체/영속 전이와 함께 부모-자식 관계에 영향이 미치는 경우 업데이트를 순서화 해야한다 <br>
 
+#### 1. 벌크 업데이트
+벌크 작업은 레코드 세트를 수정하는데 유용하다. 하지만 아래와 같은 단점이 있다 <br>
+- 벌크 업데이트는 영속성 컨텍스트를 유효하지 않은 상태로 남길 수 있다.
+- 벌크 업데이트는 낙관점 락의 이점을 얻지 못한다. @Version 무시
+- 벌크 삭제는 전이 삭제, orphanRemoval 장점을 이용할 수 없다.
 
+#### 2. bulk 삭제
+ex) author 삭제 시 book 또한 삭제되어야 한다. ex) 1:n 관계(@OneToMany) <br>
 
+#### orphanRemoval=true 사용
+위 설정은 CascadeType.REMOVE 와 다르닌까 혼동하면 안된다 <br>
 
+deleteAllInBatch 는 orphanRemoval 을 사용하지 않는다 <br>
 
-
-
-
-
+전체 레코드를 삭제하는 배치가 필요하다면 deleteAllInBatch() 를 활용하자 <br>
