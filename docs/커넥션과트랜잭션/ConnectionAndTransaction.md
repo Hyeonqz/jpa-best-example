@@ -41,3 +41,89 @@ PersistenceContext 를 활용하면 API 를 통해 영속성 컨텍스트의 내
 기본적으로 flush() 는 트랜잭션 커밋 전에 발생한다 <br>
 
 ### 2. Spring이 @Transactional 을 무시하는 이유
+```java
+@Transactional(propagation = Propagation.REQUIRES_NEW)
+private long persistAuthor(Author author) {
+    Author author = authorRepository.save(author);
+    return author.count();
+}
+```
+
+위 코드를 보면 위 메소드를 호출할 때 새로운 트랜잭션 생성을 요구한다 <br>
+그리고 위 메소드 내부로직 2개 save(), count() 는 별도 트랜잭션에서 실행된다 <br>
+
+일반적으로 @Transactional 은 public 메소드에서만 작동된다 <br>
+
+즉 @Transactional 은 public 에서만 사용되어야 한다 <br>
+
+### 3. @Transactional 타임아웃 설정 및 롤백
+```java
+1. @Transactional(timeout = 10)
+```
+```yaml
+spring:
+  transaction:
+    default-timeout: 10
+```
+
+위 2가지 방법으로 설정할 수 있다. <br>
+
+다른 방법으로는 mysql은 `select sleep(15)` 를 통해 트랜잭션을 멈출 수 있다 <br>
+
+### 4. 레포지토리 인터페이스에서 @Transactional 을 사용하는 이유와 방법
+@Transactional 이 없고 JPQL 을 사용하여 쿼리를 실행하면 트랜잭션 컨텍스트를 제공하지 않으므로 트랜잭션에서 실행이 되지 않는다 <br>
+즉 스프링은 사용자 정의 쿼리 메소드에 대해 기본 트랜잭션 컨텍스트를 제공하지 않는다 <br>
+(save(), findById() 제외) <br>
+
+Repository 계층에 @Transactional 을 붙이는 것은 좋은 방법이다 <br>
+대부분의 여러 쿼리들이 트리거 되어 실행되기 때문에 아래와 같은 방법을 추천한다 <br>
+
+```java
+@Repository
+@Transactional(readOnly=true)
+public interface AuthorRepository extends JpaRepository<Author, Long> {
+    
+    Author fetchByName(String name);
+    
+    @Transactional
+    @Modifying
+    @Query("delete from author a where a.gnere <> ?1")
+    int deleteByNeGenre(String genre);
+}
+```
+
+fetchByName() 은 @Transactional(readOnly=true) 가 적용이 된다 <br>
+deleteByNeGenre 은 @Transactional 이 적용이 된다 <br>
+
+그리고 실제 사용하는 부분은 @Transactional 을 걸어야 한다 <br>
+```java
+@Transactional
+public void test() {
+    authorRepository.fetchByName("jin");
+    authorRepository.deleteByNeGenre("a");
+}
+```
+
+위 처럼 작성하면 서비스 메소드의 트랜잭션이 시작하고, deleteByNeGenre 메소드에서 지정한 트랜잭션은 서비스 메소드의 트랜잭션에 참여한다 <br>
+즉 레포지토리에 @Transactional 을 적용했다고 해서 새로운 트랜잭션을 시작하지 않고, 기존 트랜잭션에 참여한다 <br>
+그 이유는 트랜잭션 메커니즘의 default 값이 Propagation.REQUIRED 전파 규칙을 사용하기 때문이다 <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
