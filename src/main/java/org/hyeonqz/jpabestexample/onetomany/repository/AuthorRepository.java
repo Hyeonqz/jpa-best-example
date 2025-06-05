@@ -2,6 +2,7 @@ package org.hyeonqz.jpabestexample.onetomany.repository;
 
 import java.util.List;
 
+import org.hyeonqz.jpabestexample.defaults.entity.Author;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

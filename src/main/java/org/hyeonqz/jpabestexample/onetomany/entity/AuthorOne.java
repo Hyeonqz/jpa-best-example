@@ -39,7 +39,7 @@ public class AuthorOne implements Serializable {
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "authorOne", orphanRemoval = true)
     private List<BookOne> bookOnes = new ArrayList<>();
 
     public void removeBook(BookOne bookOne) {

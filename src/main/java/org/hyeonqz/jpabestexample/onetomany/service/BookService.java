@@ -1,5 +1,6 @@
 package org.hyeonqz.jpabestexample.onetomany.service;
 
+import org.hyeonqz.jpabestexample.defaults.entity.Author;
 import org.hyeonqz.jpabestexample.onetomany.entity.AuthorOne;
 import org.hyeonqz.jpabestexample.onetomany.entity.BookOne;
 import org.hyeonqz.jpabestexample.onetomany.repository.AuthorRepository;
@@ -15,12 +16,11 @@ public class BookService {
     private final AuthorRepository authorRepository;
 
     public void insertNewBook() {
-        AuthorOne authorOne = authorRepository.getReferenceById(4L);
+        Author authorOne = authorRepository.getReferenceById(4L);
 
         BookOne bookOne = new BookOne();
         bookOne.setIsbn("003-JIN");
         bookOne.setTitle("hi");
-        bookOne.setAuthorOne(authorOne);
 
         bookRepository.save(bookOne);
 

@@ -1,11 +1,14 @@
 package org.hyeonqz.jpabestexample.onetomany.service;
 
+import org.hyeonqz.jpabestexample.defaults.entity.Author;
 import org.hyeonqz.jpabestexample.onetomany.entity.AuthorOne;
 import org.hyeonqz.jpabestexample.onetomany.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -15,7 +18,7 @@ public class AuthorService {
     // cascadeType 사용 하여 삭제
     @Transactional
     public void deleteAuthor() {
-        AuthorOne authorOne = authorRepository.findById(1L).orElse(null);
+        Author authorOne = authorRepository.findById(1L).orElse(null);
 
         authorRepository.delete(authorOne);
     }
@@ -23,11 +26,11 @@ public class AuthorService {
     // orphanRemoval 사용 하여 삭제
     @Transactional
     public void useOrphanRemovalAuthor() {
-        AuthorOne authorOne = authorRepository.findById(1L).orElse(null);
+        Author authorOne = authorRepository.findById(1L).orElse(null);
 
-        authorRepository.deleteAllByIdInBatch();
+        authorRepository.deleteAllByIdInBatch(List.of(authorOne.getBooks().get(1).getId()));
 
-        authorOne.removeBooks();
+        //authorOne.removeBooks();
         authorRepository.delete(authorOne);
     }
 

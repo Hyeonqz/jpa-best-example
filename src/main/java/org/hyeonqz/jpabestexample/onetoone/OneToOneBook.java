@@ -2,8 +2,6 @@ package org.hyeonqz.jpabestexample.onetoone;
 
 import java.io.Serializable;
 
-import org.hyeonqz.jpabestexample.onetomany.entity.Author;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
