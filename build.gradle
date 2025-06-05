@@ -24,11 +24,21 @@ repositories {
 }
 
 dependencies {
+    // springboot
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
+
+    // db
     runtimeOnly 'com.h2database:h2'
+    // db logging lib
+    implementation 'com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:1.11.0'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+
+    // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
