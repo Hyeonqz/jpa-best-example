@@ -7,6 +7,15 @@ spring:
       on-profile: dev
 
   datasource:
+    # hikariCP 설정
+    hikari:
+      connection-timeout: 50000
+      idle-timeout: 300000
+      max-lifetime: 900000
+      maximum-pool-size: 8
+      minimum-idle: 8
+      pool-name: MyPool
+      connection-test-query: select 1 from dual
     driverClassName: org.h2.Driver
     url: 'jdbc:h2:mem:jpa'
     username: hkjin
@@ -28,10 +37,25 @@ spring:
           batch_size: 30
 
 
-
 logging:
   level:
     org:
       hibernate:
         sql: debug
         type.descriptor.sql: trace
+
+app:
+  datasource:
+    master:
+      hikari:
+        username: hkjin01
+        password: 1234
+        url: "master DB -> CUD"
+        connection-timeout: 50000
+
+    slave:
+      hikari:
+        username: hkjin02
+        password: 1234
+        url: "Slave DB -> R"
+        connection-timeout: 50000
