@@ -6,10 +6,7 @@ import org.hyeonqz.jpabestexample.onetomany.entity.AuthorOne;
 
 @Getter
 @Entity
-public class Book {
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Book extends BaseEntity{
 
     private String title;
 
@@ -20,15 +17,5 @@ public class Book {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="author_id")
     private Author author;
-
-    @Override
-    public String toString() {
-        // 연관 객체를 제외시켜야 한다.
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", isbn='" + isbn + '\'' +
-                '}';
-    }
 
 }
